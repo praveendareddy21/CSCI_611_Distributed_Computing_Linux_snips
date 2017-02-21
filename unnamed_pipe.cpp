@@ -32,8 +32,33 @@ int main(){
 
 	int p2c[2],c2p[2]; // file descriptors  for pipes
 
+	pid_t parent_pid, child_pid;
+
 	pipe(p2c);
 	pipe(c2p);
+
+	parent_pid = getpid();
+
+	child_pid = fork();
+	if(child_pid > 0 ){ // parent process
+		cout<<"in parent process : parent pid :"<<parent_pid<<" child pid : "<<child_pid<<endl;
+
+		// closing useless pipe ends
+		close(p2c[P2C_READ_END]);
+		close(c2p[C2P_WRITE_END]);
+
+
+	}
+	else{ // child process
+		child_pid = getpid();
+		cout<<"in child process : parent pid :"<<parent_pid<<" child pid : "<<child_pid<<endl;
+
+		// closing useless pipe ends
+		close(p2c[P2C_WRITE_END]);
+		close(c2p[C2P_READ_END]);
+
+	}
+
 
 	cout<<"out";
 
