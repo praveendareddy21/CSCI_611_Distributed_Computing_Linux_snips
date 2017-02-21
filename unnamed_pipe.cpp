@@ -34,8 +34,8 @@ int main(){
 
 	pid_t parent_pid, child_pid;
 
-	char  msg [] ="hello!!!";
-	char *msg2;
+	char  msg [] ="h";
+
 	pipe(p2c);
 	pipe(c2p);
 
@@ -50,7 +50,7 @@ int main(){
 		close(c2p[C2P_WRITE_END]);
 
 		//cin>>msg;
-		write(p2c[P2C_WRITE_END],msg,(strlen(msg)+1));
+		write(p2c[P2C_WRITE_END],"hello\0",6);
 
 
 
@@ -64,7 +64,9 @@ int main(){
 		close(p2c[P2C_WRITE_END]);
 		close(c2p[C2P_READ_END]);
 
-		read(p2c[P2C_READ_END],msg2,(strlen(msg)+1));
+		char msg2[6];
+
+		read(p2c[P2C_READ_END],msg2,6);
 		cout<<"message read in child as : "<<msg2;
 
 	}
