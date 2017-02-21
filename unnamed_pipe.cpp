@@ -30,6 +30,11 @@ using namespace std;
 
 int main(){
 
+	int p2c[2],c2p[2]; // file descriptors  for pipes
+
+	pipe(p2c);
+	pipe(c2p);
+
 	cout<<"out";
 
 	return 0;
