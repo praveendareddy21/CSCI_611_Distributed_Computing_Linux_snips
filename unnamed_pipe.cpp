@@ -34,6 +34,8 @@ int main(){
 
 	pid_t parent_pid, child_pid;
 
+	char  msg [] ="hello!!!";
+	char *msg2;
 	pipe(p2c);
 	pipe(c2p);
 
@@ -47,6 +49,11 @@ int main(){
 		close(p2c[P2C_READ_END]);
 		close(c2p[C2P_WRITE_END]);
 
+		//cin>>msg;
+		write(p2c[P2C_WRITE_END],msg,(strlen(msg)+1));
+
+
+
 
 	}
 	else{ // child process
@@ -57,7 +64,31 @@ int main(){
 		close(p2c[P2C_WRITE_END]);
 		close(c2p[C2P_READ_END]);
 
+		read(p2c[P2C_READ_END],msg2,(strlen(msg)+1));
+		cout<<"message read in child as : "<<msg2;
+
 	}
+
+
+	if(getpid() == child_pid)
+	{
+		close(p2c[P2C_READ_END]);
+		close(c2p[C2P_WRITE_END]);
+		exit(0);
+	}
+
+	if(getpid() == parent_pid)
+	{
+		int status;
+		close(p2c[P2C_WRITE_END]);
+		close(c2p[C2P_READ_END]);
+		if( wait(&status) )
+		{
+
+		}
+		exit(0);
+	}
+
 
 
 	cout<<"out";
