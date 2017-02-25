@@ -1,14 +1,24 @@
-all:unnamed_pipe simple_fork_example dup_file_read_write
+CC = gcc
+
+CSAPP_INC = ../include
+CSAPP_SRC = ../src
+
+CFLAGS = -Wall -O2 -I $(CSAPP_INC) -I .
+LDLIBS = -lpthread
+
+PROGS =	echoserveri\
+	echoclient\
 
 
-simple_fork_example: simple_fork_example.cpp 
-	g++ -o simple_fork_example  simple_fork_example.cpp -lpthread -lrt 
-	
-unnamed_pipe: unnamed_pipe.cpp 
-	g++ -o unnamed_pipe unnamed_pipe.cpp -lpthread -lrt
+all: csapp.o $(PROGS)
+$(PROGS): csapp.o
+csapp.o: csapp.c csapp.h
 
-dup_file_read_write: unnamed_pipe.cpp 
-	g++ -o dup_file_read_write dup_file_read_write.cpp -lpthread -lrt
-	
+
+
+# Programs that need more than one .o file
+echoserveri: echoserveri.o
+
+
 clean:
-	rm -f unnamed_pipe simple_fork_example dup_file_read_write
+	rm -f *.o *~
