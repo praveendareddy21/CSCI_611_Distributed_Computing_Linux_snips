@@ -43,16 +43,18 @@ using namespace std;
 int main(){
 
 	pid_t parent_pid, child_pid;
-	char  testMap[11] ="*** ** ***";
+	char * testMap ="***\n* *\n* *";
 
-    mkfifo("mymap_test.txt", S_IRUSR | S_IWUSR);
-    int fd = open("mymap_test.txt", O_WRONLY);
+	char * file_name = "mymap_test.txt";
+
+    mkfifo(file_name, S_IRUSR | S_IWUSR);
+    int fd = open(file_name, O_WRONLY );
 
     write(fd, testMap, strlen(testMap));
     close(fd);
 
 
-
+    unlink(file_name);
 	cout<<"out";
 
 	return 0;
