@@ -43,7 +43,7 @@ using namespace std;
 int main(){
 
 	pid_t parent_pid, child_pid;
-	char * testMap ="***\n* *\n* *";
+	char * testMap ="2\n***\n* *\n* *";
 
 	char * file_name = "mymap_test.txt";
 
