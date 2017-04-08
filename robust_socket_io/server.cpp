@@ -6,8 +6,8 @@
 #include<string.h> //for memset
 #include<stdio.h> //for fprintf, stderr, etc.
 #include<stdlib.h> //for exit
-
-
+#include<errno.h>
+#include"fancyRW.h"
 
 int main()
 {
@@ -69,12 +69,21 @@ int main()
   //read & write to the socket
   char buffer[100];
   memset(buffer,0,100);
+
+
+
+
+
+
   int n;
-  if((n=read(new_sockfd, buffer, 99))==-1)
+  /*if((n=read(new_sockfd, buffer, 99))==-1)
   {
     perror("read is failing");
     printf("n=%d\n", n);
-  }
+  }*/
+
+  rio_readn(new_sockfd, buffer, 11);
+
   printf("The client said: %s\n", buffer);
 
   const char* message="These are the times that try men's souls.";

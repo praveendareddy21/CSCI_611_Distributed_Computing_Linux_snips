@@ -6,6 +6,10 @@
 #include<string.h> //for memset
 #include<stdio.h> //for fprintf, stderr, etc.
 #include<stdlib.h> //for exit
+#include<errno.h>
+#include"fancyRW.h"
+
+
 
 int main()
 {
@@ -39,12 +43,21 @@ int main()
 
   const char* message="One small step for (a) man, one large  leap for Mankind";
   int n;
-  if((n=write(sockfd, message, strlen(message)))==-1)
+
+
+  /*if((n=write(sockfd, message, strlen(message)))==-1)
   {
     perror("write");
     exit(1);
-  }
-  printf("client wrote %d characters\n", n);
+  }*/
+  rio_writen(sockfd, "To", 2);
+  rio_writen(sockfd, "dd", 2);
+  rio_writen(sockfd, "Gibso", 5);
+  rio_writen(sockfd, "n", 1);
+
+  return 0;
+
+  printf("client wrote %d characters\n", 11);
   char buffer[100];
   memset(buffer, 0, 100);
   read(sockfd, buffer, 99);
