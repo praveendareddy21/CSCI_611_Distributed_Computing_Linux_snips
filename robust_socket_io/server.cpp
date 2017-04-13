@@ -71,18 +71,8 @@ int main()
   memset(buffer,0,100);
 
 
-
-
-
-
-  int n;
-  /*if((n=read(new_sockfd, buffer, 99))==-1)
-  {
-    perror("read is failing");
-    printf("n=%d\n", n);
-  }*/
-
-  rio_readn(new_sockfd, buffer, 11);
+  //rio_readn(new_sockfd, buffer, 11);
+  READ<char> (new_sockfd, buffer, 11);
 
   printf("The client said: %s\n", buffer);
 

@@ -18,34 +18,48 @@
 template<typename T>
 int READ(int fd, T* obj_ptr, int count)
 {
+  int bytes_left = count, bytes_read = 0;
   char* addr=(char*)obj_ptr;
   //loop. Read repeatedly until count bytes are read in
+  while(bytes_left > 0){
+    bytes_read = read(fd, addr, bytes_left);
+
+    if (bytes_read == -1 && errno == EINTR){ // recoverable error
+      bytes_read = 0;
+      continue;
+    }
+    else if(bytes_read == -1){ // unrecoverable error
+      return -1;
+    }
+    else if(bytes_read == 0){ // EOF
+      break;
+    }
+  	bytes_left -= bytes_read;
+  	addr += bytes_read;
+  }
+  return count; // returning total bytes read
 }
 
 template<typename T>
 int WRITE(int fd, T* obj_ptr, int count)
 {
+  int bytes_left = count, bytes_written = 0;
   char* addr=(char*)obj_ptr;
   //loop. Write repeatedly until count bytes are written out
+  while(bytes_left > 0){
+    bytes_written = write(fd, addr, bytes_left);
+
+    if (bytes_written == -1 && errno == EINTR){ // recoverable error
+      bytes_written = 0;
+      continue;
+    }
+    else if(bytes_written == -1){ // unrecoverable error
+      return -1;
+    }
+    bytes_left -= bytes_written;
+    addr += bytes_written;
+  }
+  return count; // returning total bytes written
 }
+
 #endif
-
-//Example of a method for testing your functions shown here:
-//opened/connected/etc to a socket with fd=7
-//
-/*
-
-int count=write(7, "Todd Gibson", 11);
-cout << count << endl;//will display a number between 1 and 11
-int count=write(7, "d Gibson", 8);
-//
-//How to test your READ template. Read will be: READ(7, ptr, 11);
-write(7, "To", 2);
-write(7, "DD ", 3);
-write(7, "Gibso", 5);
-write(7, "n", 1);
-
-
-*/
-//
-//

@@ -50,10 +50,7 @@ int main()
     perror("write");
     exit(1);
   }*/
-  rio_writen(sockfd, "To", 2);
-  rio_writen(sockfd, "dd", 2);
-  rio_writen(sockfd, "Gibso", 5);
-  rio_writen(sockfd, "n", 1);
+  WRITE<char>(sockfd, "ToddGibson", 11);
 
   return 0;
 
