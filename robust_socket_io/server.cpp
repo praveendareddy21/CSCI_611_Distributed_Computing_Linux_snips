@@ -76,8 +76,8 @@ int main()
 
   printf("The client said: %s\n", buffer);
 
-  const char* message="These are the times that try men's souls.";
-  write(new_sockfd, message, strlen(message));
+  int code  = 7;
+  WRITE<int>(new_sockfd, &code, sizeof(int));
   close(new_sockfd);
   return(0);
 }

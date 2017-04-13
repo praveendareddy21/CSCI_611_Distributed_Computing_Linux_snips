@@ -52,13 +52,11 @@ int main()
   }*/
   WRITE<char>(sockfd, "ToddGibson", 11);
 
-  return 0;
-
   printf("client wrote %d characters\n", 11);
-  char buffer[100];
-  memset(buffer, 0, 100);
-  read(sockfd, buffer, 99);
-  printf("%s\n", buffer);
+
+  int server_num;
+  READ<int>(sockfd, &server_num, sizeof(int));
+  printf("number from server is %d\n", server_num);
   close(sockfd);
   return 0;
 }
