@@ -42,7 +42,18 @@ int main()
   freeaddrinfo(servinfo);
 
   const char* message="One small step for (a) man, one large  leap for Mankind";
-  int n;
+  int rows,cols;
+  char initial_map[2010];
+
+  READ<int>(sockfd, &rows, sizeof(int));
+  READ<int>(sockfd, &cols, sizeof(int));
+  printf("reading from server done. rows - %d cols - %d\n", rows,cols);
+
+  READ<char>(sockfd, initial_map, (rows*cols + 1)*sizeof(char));
+
+  printf("reading from server done map - %s\n", initial_map);
+  close(sockfd);
+  return 0;
 
 
   /*if((n=write(sockfd, message, strlen(message)))==-1)
@@ -56,6 +67,8 @@ int main()
 
   int server_num;
   READ<int>(sockfd, &server_num, sizeof(int));
+
+
   printf("number from server is %d\n", server_num);
   close(sockfd);
   return 0;

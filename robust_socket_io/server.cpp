@@ -66,6 +66,29 @@ int main()
     exit(1);
   }
 
+  printf("Connected to client.\n");
+
+  int rows = 2 ,cols = 3;
+  char initial_map[2100];
+  for(int i=0; i< rows*cols; i++ )
+    initial_map[i] = '*';
+  initial_map[rows*cols] = '\0';
+
+  WRITE<int>(new_sockfd, &rows, sizeof(int));
+  WRITE<int>(new_sockfd, &cols, sizeof(int));
+
+  WRITE<char>(new_sockfd, initial_map, (rows*cols + 1)*sizeof(char));
+
+
+
+
+  printf("Writing to client completed.\n");
+
+  close(new_sockfd);
+  return(0);
+
+
+
   //read & write to the socket
   char buffer[100];
   memset(buffer,0,100);
