@@ -11,6 +11,9 @@
 #include"goldchase.h"
 #include<iostream>
 #include<string>
+#include<vector>
+
+
 
 using namespace std;
 
@@ -19,7 +22,7 @@ int read_fd = -1;
 
 void send_Socket_Message(char PLR_MASK, string msg);
 void send_Socket_Player(char PLR_MASK);
-void send_Socket_Map(char PLR_MASK);
+void send_Socket_Map(vector< pair<short, char> > mapChangesVector);
 
 int get_Write_Socket_fd(){
   int sockfd; //file descriptor for the socket
@@ -80,6 +83,36 @@ void send_Socket_Message(char PLR_MASK, string msg){
   delete [] cstr;
 }
 
+void send_Socket_Map(vector<pair<short,char> > mapChangesVector){
+  char protocol_type = 0, changedMapValue;
+  short changedMapId;
+  int Vector_size = mapChangesVector.size();
+
+  WRITE <char>(write_fd, &protocol_type, sizeof(char));
+
+  WRITE <int>(write_fd, &Vector_size, sizeof(int));
+
+  for(int i = 0; i<Vector_size; i++){
+    changedMapId = mapChangesVector[i].first;
+    changedMapValue = mapChangesVector[i].second;
+
+    WRITE <short>(write_fd, &changedMapId, sizeof(short));
+    WRITE <char>(write_fd, &changedMapValue, sizeof(char));
+  }
+
+}
+
+vector<pair<short,char> >  getMapChangeVector(){
+  vector<pair<short,char> > mapChangesVector;
+
+  mapChangesVector.push_back(make_pair(0,'A'));
+  mapChangesVector.push_back(make_pair(1,'B'));
+  mapChangesVector.push_back(make_pair(2,'C'));
+  mapChangesVector.push_back(make_pair(3,'D'));
+
+return mapChangesVector;
+}
+
 int main()
 {
   write_fd = get_Write_Socket_fd();
@@ -88,7 +121,13 @@ int main()
 
   send_Socket_Player(player_mask);
 
-  send_Socket_Message(player_mask, "Hello World!!");
+  //send_Socket_Message(player_mask, "Hello World!!");
+
+
+  vector<pair<short,char> > mapChangesVector = getMapChangeVector();
+  send_Socket_Map(mapChangesVector);
+
+
 
   send_Socket_Player(player_mask);
 
