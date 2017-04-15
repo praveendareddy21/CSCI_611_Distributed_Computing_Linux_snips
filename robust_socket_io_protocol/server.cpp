@@ -26,6 +26,14 @@ void process_Socket_Map(char protocol_type);
 
 void process_Socket_Message(char protocol_type){
 
+  int msg_length = 0;
+  char msg_cstring[100];
+
+  READ <int>(write_fd, &msg_length, sizeof(int));
+  READ <char>(write_fd, msg_cstring, msg_length*sizeof(char));
+
+  printf("in server : msglen %d - msg - %s\n",msg_length, msg_cstring);
+
 }
 
 void process_Socket_Player(char protocol_type){
@@ -98,7 +106,7 @@ int get_Read_Socket_fd(){
 }
 
 void socket_Communication_Handler(){
-  char protocol_type;
+  char protocol_type = ' ' ;
 
   printf("Attempted to read.\n");
 
@@ -106,15 +114,17 @@ void socket_Communication_Handler(){
 
   if (protocol_type&G_SOCKPLR ){
     printf("read protocol_type - Socket_Player from client.\n");
-
+    process_Socket_Player(protocol_type);
 
   }
   else if (protocol_type&G_SOCKMSG ){
     printf("read protocol_type - Socket_Message from client.\n");
+    process_Socket_Message(protocol_type);
 
   }
   else if (protocol_type ){
     printf("read protocol_type - Socket_Map from client.\n");
+    process_Socket_Map(protocol_type);
 
   }
 
