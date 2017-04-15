@@ -11,6 +11,7 @@
 #include"goldchase.h"
 #include<iostream>
 #include<string>
+#include<vector>
 
 using namespace std;
 
@@ -101,6 +102,34 @@ void process_Socket_Player(char protocol_type){
 }
 
 void process_Socket_Map(char protocol_type){
+  int Vector_size;
+  char changedMapValue;
+  short changedMapId;
+
+  vector<pair<short,char> > mapChangesVector;
+
+  READ <int>(read_fd, &Vector_size, sizeof(int));
+  printf("in server : Vector_size %d\n",Vector_size);
+
+  for (int i=0; i<Vector_size; i++){
+
+    READ <short>(read_fd, &changedMapId, sizeof(short));
+    READ <char>(read_fd, &changedMapValue, sizeof(char));
+
+    mapChangesVector.push_back(make_pair(changedMapId,changedMapValue));
+  }
+
+  printf("in server : Vector_size %d\n",mapChangesVector.size());
+  printf("in server : printing mapChangesVector\n");
+  for(int i = 0; i<Vector_size; i++){
+    changedMapId = mapChangesVector[i].first;
+    changedMapValue = mapChangesVector[i].second;
+
+    printf("Id : %d --- Value : %c\n", changedMapId, changedMapValue);
+
+  }
+
+
 
 }
 
@@ -109,7 +138,7 @@ void process_Socket_Map(char protocol_type){
 void socket_Communication_Handler(){
   char protocol_type = ' ' ;
 
-  printf("Attempted to read.\n");
+  printf("Attempting to start Socket communications protocol\n");
 
   READ <char>(read_fd, &protocol_type, sizeof(char));
 
@@ -123,22 +152,17 @@ void socket_Communication_Handler(){
     process_Socket_Message(protocol_type);
 
   }
-  else if (protocol_type ){
+  else if (protocol_type == 0 ){
     printf("read protocol_type - Socket_Map from client.\n");
     process_Socket_Map(protocol_type);
 
   }
-
-
-  //}   //end of while
-
-
-
 }
 
 int main()
 {
   read_fd = get_Read_Socket_fd();
+
   socket_Communication_Handler();
 
   printf("Exiting socket connection.\n");
