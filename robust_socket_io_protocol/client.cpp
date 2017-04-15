@@ -86,9 +86,15 @@ int main()
   char player_mask = ' ';
 
 
-  //send_Socket_Player(player_mask);
+  send_Socket_Player(player_mask);
 
   send_Socket_Message(player_mask, "Hello World!!");
+
+  send_Socket_Player(player_mask);
+
+  send_Socket_Message(player_mask, "Hello World!!");
+
+  send_Socket_Player(player_mask);
 
   printf("Exiting socket connection.\n");
   close(write_fd);

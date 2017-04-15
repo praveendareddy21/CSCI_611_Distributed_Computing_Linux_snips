@@ -109,7 +109,7 @@ void process_Socket_Map(char protocol_type){
 void socket_Communication_Handler(){
   char protocol_type = ' ' ;
 
-  printf("Attempted to read.\n");
+  printf("Attempting to start socket protocol.\n");
 
   READ <char>(read_fd, &protocol_type, sizeof(char));
 
@@ -128,17 +128,13 @@ void socket_Communication_Handler(){
     process_Socket_Map(protocol_type);
 
   }
-
-
-  //}   //end of while
-
-
-
 }
 
 int main()
 {
   read_fd = get_Read_Socket_fd();
+
+  for(int i=0; i < 5; i++)
   socket_Communication_Handler();
 
   printf("Exiting socket connection.\n");
