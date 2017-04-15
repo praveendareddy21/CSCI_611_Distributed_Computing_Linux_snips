@@ -138,11 +138,7 @@ void process_Socket_Map(char protocol_type){
 void socket_Communication_Handler(){
   char protocol_type = ' ' ;
 
-
   printf("Attempting to start Socket communications protocol\n");
-
-
-
   READ <char>(read_fd, &protocol_type, sizeof(char));
 
   if (protocol_type&G_SOCKPLR ){
@@ -165,7 +161,6 @@ void socket_Communication_Handler(){
 int main()
 {
   read_fd = get_Read_Socket_fd();
-
 
   socket_Communication_Handler();
 
