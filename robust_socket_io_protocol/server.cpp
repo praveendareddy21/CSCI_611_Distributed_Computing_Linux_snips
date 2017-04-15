@@ -110,7 +110,12 @@ void socket_Communication_Handler(){
 
   printf("Attempted to read.\n");
 
-  READ <char>(read_fd, &protocol_type, sizeof(char));
+  char c, i = 'I' ;
+
+  WRITE<char>(read_fd, &i, 1);
+  READ<char>(read_fd, &c, 1);
+
+printf("Read in Server as c-%c.\n",c);
 
   if (protocol_type&G_SOCKPLR ){
     printf("read protocol_type - Socket_Player from client.\n");

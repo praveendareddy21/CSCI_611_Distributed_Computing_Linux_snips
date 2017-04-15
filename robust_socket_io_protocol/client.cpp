@@ -59,11 +59,10 @@ void send_Socket_Map(char PLR_MASK, string msg);
 
 void send_Socket_Player(char PLR_MASK){
 
-  char protocol_type = G_SOCKPLR;
-  protocol_type &= PLR_MASK;
+  char c=  'A'; //G_SOCKPLR | G_PLR0;
+  WRITE<char>(write_fd, &c, 1);
 
-  WRITE <char>(write_fd, &protocol_type, sizeof(char));
-
+  return;
 
 }
 
@@ -87,16 +86,29 @@ void send_Socket_Message(char PLR_MASK, string msg){
 
 }
 
+void do_shit(){
+
+
+}
+
 int main()
 {
   int write_fd = get_Write_Socket_fd();
 
   char protocol_type = ' ';
 
+  while(1){
+    if(write_fd != -1)
+      break;
+  }
+do_shit();
+char i, c=  'A'; //G_SOCKPLR | G_PLR0;
+READ<char>(write_fd, &i, 1);
+WRITE<char>(write_fd, &c, 1);
 
   //send_Socket_Player(protocol_type);
 
-  send_Socket_Message(protocol_type, "Hello World!!");
+  //send_Socket_Message(protocol_type, "Hello World!!");
 
   printf("Exiting socket connection.\n");
   close(write_fd);
