@@ -24,27 +24,6 @@ void process_Socket_Message(char protocol_type);
 void process_Socket_Player(char protocol_type);
 void process_Socket_Map(char protocol_type);
 
-void process_Socket_Message(char protocol_type){
-
-  int msg_length = 0;
-  char msg_cstring[100];
-
-  READ <int>(write_fd, &msg_length, sizeof(int));
-  READ <char>(write_fd, msg_cstring, msg_length*sizeof(char));
-
-  printf("in server : msglen %d - msg - %s\n",msg_length, msg_cstring);
-
-}
-
-void process_Socket_Player(char protocol_type){
-
-}
-
-void process_Socket_Map(char protocol_type){
-
-}
-
-
 int get_Read_Socket_fd(){
   int sockfd; //file descriptor for the socket
  int status; //for error checking
@@ -102,8 +81,30 @@ int get_Read_Socket_fd(){
  }
  printf("Connected to client.\n");
  return new_sockfd;
+}
+
+
+void process_Socket_Message(char protocol_type){
+
+  int msg_length = 0;
+  char msg_cstring[100];
+
+  READ <int>(read_fd, &msg_length, sizeof(int));
+  READ <char>(read_fd, msg_cstring, msg_length*sizeof(char));
+
+  printf("in server : msglen %d - msg - %s\n",msg_length, msg_cstring);
 
 }
+
+void process_Socket_Player(char protocol_type){
+
+}
+
+void process_Socket_Map(char protocol_type){
+
+}
+
+
 
 void socket_Communication_Handler(){
   char protocol_type = ' ' ;
