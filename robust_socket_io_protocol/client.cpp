@@ -17,6 +17,9 @@ using namespace std;
 int write_fd = -1;
 int read_fd = -1;
 
+void send_Socket_Message(char PLR_MASK, string msg);
+void send_Socket_Player(char PLR_MASK);
+void send_Socket_Map(char PLR_MASK);
 
 int get_Write_Socket_fd(){
   int sockfd; //file descriptor for the socket
@@ -49,76 +52,45 @@ int get_Write_Socket_fd(){
 
   printf("Connected to server.\n");
   return sockfd;
-
 }
-
-void send_Socket_Message(char PLR_MASK, string msg);
-void send_Socket_Player(char PLR_MASK);
-void send_Socket_Map(char PLR_MASK, string msg);
 
 
 void send_Socket_Player(char PLR_MASK){
+  char protocol_type = G_SOCKPLR;
+  protocol_type |= PLR_MASK;
 
-  char c=  'A'; //G_SOCKPLR | G_PLR0;
-  WRITE<char>(write_fd, &c, 1);
-
+  WRITE <char>(write_fd, &protocol_type, sizeof(char));
   return;
-
 }
 
 void send_Socket_Message(char PLR_MASK, string msg){
-  int msg_length = 0;
+  int msg_length = msg.length() + 1;
   char protocol_type = G_SOCKMSG;
-  protocol_type &= PLR_MASK;
+  char *cstr = new char[msg_length];
 
-  char msg_cstring[100] = "Hello World!!";
-  // = msg.c_str();
-  msg_length = msg.size();
-  printf("in client : msglen %d - msg - %s\n",msg_length, msg_cstring);
+  strcpy(cstr, msg.c_str());
+  protocol_type |= PLR_MASK;
+
+  printf("in client : msglen %d - msg - %s\n",msg_length, cstr);
 
   WRITE <char>(write_fd, &protocol_type, sizeof(char));
-
   WRITE <int>(write_fd, &msg_length, sizeof(int));
-  WRITE <char>(write_fd, msg_cstring, msg_length*sizeof(char));
+  WRITE <char>(write_fd, cstr, msg_length*sizeof(char));
 
-
-
-
-}
-
-void do_shit(){
-
-
+  delete [] cstr;
 }
 
 int main()
 {
-  int write_fd = get_Write_Socket_fd();
+  write_fd = get_Write_Socket_fd();
+  char player_mask = ' ';
 
-  char protocol_type = ' ';
 
-  while(1){
-    if(write_fd != -1)
-      break;
-  }
-do_shit();
-char i, c=  'A'; //G_SOCKPLR | G_PLR0;
-READ<char>(write_fd, &i, 1);
-WRITE<char>(write_fd, &c, 1);
+  //send_Socket_Player(player_mask);
 
-  //send_Socket_Player(protocol_type);
-
-  //send_Socket_Message(protocol_type, "Hello World!!");
+  send_Socket_Message(player_mask, "Hello World!!");
 
   printf("Exiting socket connection.\n");
   close(write_fd);
   return 1;
-
-
-
-
-
-
-
-
 }
